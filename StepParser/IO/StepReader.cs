@@ -441,31 +441,22 @@ namespace StepParser.IO
             if( currentChar != '/' )
                 throw CreateStepReaderException("A comment should start with a backslash, /");
 
+            var previousChar = currentChar;
             currentChar = MoveNext();
 
             if (currentChar == '*')
             {
                 while ((currentChar = MoveNext()) != '\0' || !_end)
                 {
-                    if (currentChar == '*')
+                    if (currentChar == '/' && previousChar == '*')
                     {
-                        if ((currentChar = MoveNext()) != '\0' || !_end)
-                        {
-                            if (currentChar == '/')
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                _buffer.Append('*');
-                                _buffer.Append(currentChar);
-                            }
-                        }
+                        break;
                     }
                     else
                     {
                         _buffer.Append(currentChar);
                     }
+                    previousChar = currentChar;
                 }
             }
             else
