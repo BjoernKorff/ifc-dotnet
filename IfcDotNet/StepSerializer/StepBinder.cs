@@ -591,7 +591,22 @@ namespace IfcDotNet.StepSerializer
 				Type enumType = Nullable.GetUnderlyingType( pi.PropertyType );
 				if(enumType == null)
 					enumType = pi.PropertyType;
-				val = Enum.Parse(enumType, spv);//HACK the ToLower may not work in all cases
+                if (Enum.IsDefined(enumType, spv))
+                {
+                    val = Enum.Parse(enumType, spv);
+                }
+                else
+                {
+                    val = null;
+                    foreach (var enumValue in Enum.GetNames(enumType))
+                    {
+                        if (enumValue.ToLowerInvariant().StartsWith(spv))
+                        {
+                            val = Enum.Parse(enumType, enumValue);
+                            break;
+                        }
+                    }
+                }
 			}
 			
 			if(val == null)
