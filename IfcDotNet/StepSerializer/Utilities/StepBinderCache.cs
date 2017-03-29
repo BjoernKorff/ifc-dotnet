@@ -44,6 +44,8 @@ namespace IfcDotNet.StepSerializer.Utilities
 			Type t = null;
 			try{
 				t = _entitiesMappedToUpperCaseName[name];
+                if (t.IsEnum)
+                    t = _entitiesMappedToUpperCaseName[name + "1"]; //Enums always end with the digit 1.
 			}catch{
 				t = _entitiesMappedToUpperCaseName[name + "1"]; //HACK some types end with the digit 1.
 			}
