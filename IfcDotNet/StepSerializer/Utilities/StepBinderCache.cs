@@ -101,7 +101,7 @@ namespace IfcDotNet.StepSerializer.Utilities
 				Array.Sort(properties, new DeclarationOrderComparator()); //HACK order the properties http://www.sebastienmahe.com/v3/seb.blog/2010/03/08/c-reflection-getproperties-kept-in-declaration-order/
 				
 				IList<PropertyInfo> cachedProperties = new List<PropertyInfo>();
-				IDictionary<PropertyInfo, int> stepPropertyAttributeOrders = new Dictionary<PropertyInfo, int>();
+                IDictionary<int, PropertyInfo> stepPropertyAttributeOrders = new Dictionary<int, PropertyInfo>();
 				foreach(PropertyInfo pi in properties){
 					if(IsEntityProperty(pi)){ //filter out all the entity properties (these are a required for IfcXml format only, and are not relevant to STEP format)
 						continue;
@@ -119,14 +119,16 @@ namespace IfcDotNet.StepSerializer.Utilities
 						
 					int orderNo = GetStepPropertyOrderNumber(tempPi);
 					if(orderNo != -1){
-						stepPropertyAttributeOrders.Add(tempPi, orderNo);
+                        stepPropertyAttributeOrders.Add(orderNo, tempPi);
 					}else{
 						cachedProperties.Add(tempPi);
 					}
 				}
-				
-				foreach(KeyValuePair<PropertyInfo, int> kvp in stepPropertyAttributeOrders){
-					cachedProperties.Insert(kvp.Value, kvp.Key);
+
+                var indices = new List<int>(stepPropertyAttributeOrders.Keys);
+                indices.Sort();
+				foreach(var index in indices){
+                    cachedProperties.Insert(index, stepPropertyAttributeOrders[index]);
 				}
 				
 				this._entityProperties.Add(t.FullName, cachedProperties);
