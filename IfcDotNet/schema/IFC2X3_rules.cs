@@ -874,7 +874,7 @@ namespace IfcDotNet.Schema
     public partial class IfcNonNegativeLengthMeasure : IHasRules{
         //TODO
     }
-    public partial class IfcNormalisedRatioMeasure : IHasRules{
+    public partial class IfcNormalisedRatioMeasure1 : IHasRules{
         //TODO
     }
     public partial class IfcObjective : IHasRules{
@@ -960,7 +960,7 @@ namespace IfcDotNet.Schema
     public partial class IfcPolyLoop : IHasRules{
         //TODO
     }
-    public partial class IfcPositiveLengthMeasure : IHasRules{
+    public partial class IfcPositiveLengthMeasure1 : IHasRules{
         //TODO
     }
     public partial class IfcPositivePlaneAngleMeasure : IHasRules{
