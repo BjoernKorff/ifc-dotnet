@@ -15,7 +15,15 @@ namespace IfcDotNet_ProfilerInterface
 	{
 		public static void Main(string[] args)
 		{
-			string inputFile = "../../../IfcDotNet_UnitTests/sampleData/Laasenhof_aus_AutodeskRevit.ifc";
+			string inputFile = "../../../IfcDotNet_UnitTests/sampleData/NIST_TrainingStructure_param.ifc";
+            if(args.Length>0)
+            {
+                var fileName = args[0];
+                if (File.Exists(fileName))
+                    inputFile = fileName;
+                else
+                    inputFile = Path.Combine(Path.GetDirectoryName(inputFile), Path.GetFileName(fileName));
+            }
 			if(!File.Exists(inputFile)){
 				Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 				                                "File does not exist at : {0}", inputFile));
