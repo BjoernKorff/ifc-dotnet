@@ -773,6 +773,31 @@ namespace StepParser.IO
                                     char hexChar = Convert.ToChar(int.Parse(new string(hexValues), NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo));
                                     _buffer.Append(hexChar);
                                     break;
+
+                                case 'X':
+                                    char[] block = new char[] { '\\', 'x', '2', '\\' };
+                                    for (int i = 2; i < 4; i++)
+                                    {
+                                        if ((currentChar = MoveNext()) == '\0' || _end || block[i] != currentChar)
+                                            throw CreateStepReaderException("Unexpected end while parsing unicode character. Line {0}, position {1}.", _currentLineNumber, _currentLinePosition);
+                                    }
+
+                                    while (true)
+                                    {
+                                        for (int i = 0; i < 4; i++)
+                                        {
+                                            if ((currentChar = MoveNext()) != '\0' || !_end)
+                                                block[i] = currentChar;
+                                            else
+                                                throw CreateStepReaderException("Unexpected end while parsing unicode character. Line {0}, position {1}.", _currentLineNumber, _currentLinePosition);
+                                        }
+                                        if (new string(block) != @"\X0\")
+                                            _buffer.Append(Convert.ToChar(int.Parse(new string(block), NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo)));
+                                        else
+                                            break;
+                                    }
+
+                                    break;
                                 default:
                                     throw CreateStepReaderException("Bad escape sequence: {0}. Line {1}, position {2}.", @"\" + currentChar, _currentLineNumber, _currentLinePosition);
                             }
