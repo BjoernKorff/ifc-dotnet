@@ -630,7 +630,12 @@ namespace IfcDotNet.StepSerializer
 				throw new ArgumentNullException("obj");
 			if(!(sv.Value is int))
 				throw new ArgumentException("sv.Value cannot be cast to an int");
-			pi.SetValue(obj, (int)sv.Value, null);
+            object convertedValue;
+            if (pi.PropertyType.IsGenericType)
+                convertedValue = Convert.ChangeType(sv.Value, pi.PropertyType.GetGenericArguments()[0]);
+            else
+                convertedValue = Convert.ChangeType(sv.Value, pi.PropertyType);
+            pi.SetValue(obj, convertedValue, null);
 		}
 		
 		/// <summary>
