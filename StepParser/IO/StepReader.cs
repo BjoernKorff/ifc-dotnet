@@ -552,7 +552,7 @@ namespace StepParser.IO
             
             double numberValue = 0;
             try{
-                numberValue = Double.Parse(number);
+                numberValue = Double.Parse(number, CultureInfo.InvariantCulture);
             }catch(FormatException fe){
                 throw CreateStepReaderException("Failed to format number, {0}, which failed due to : {1}", number, fe.Message);
             }catch(OverflowException oe){
